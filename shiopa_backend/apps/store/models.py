@@ -29,6 +29,7 @@ class Currency(Model):
 class Country(Model):
     name = fields.CharField(max_length=255)
     default_country = fields.BooleanField(default=False)
+    delivery_fee = fields.FloatField(null=True)
     currency: fields.OneToOneRelation[Currency] = fields.OneToOneField(
         model_name="models.Currency",
         related_name="country",

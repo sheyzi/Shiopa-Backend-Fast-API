@@ -63,3 +63,63 @@ CREATE TABLE IF NOT EXISTS "shippingaddress" (
     "country_id" INT NOT NULL REFERENCES "country" ("id") ON DELETE CASCADE,
     "user_id" INT NOT NULL REFERENCES "user" ("id") ON DELETE CASCADE
 );
+CREATE TABLE IF NOT EXISTS "coupon" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "coupon_code" VARCHAR(255) NOT NULL,
+    "coupon_type" VARCHAR(255),
+    "coupon_amount" INT,
+    "active" INT NOT NULL  DEFAULT 1,
+    "num_available" INT NOT NULL,
+    "num_used" INT NOT NULL,
+    "created_at" TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE IF NOT EXISTS "image" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "alt_text" VARCHAR(255),
+    "url" VARCHAR(255) NOT NULL  DEFAULT 'https://res.cloudinary.com/sheyzisilver/image/upload/v1628729409/placeholder_rl2wsr.png'
+);
+CREATE TABLE IF NOT EXISTS "category" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "slug" VARCHAR(255) NOT NULL,
+    "image_id" INT REFERENCES "image" ("id") ON DELETE SET NULL,
+    "parent_id" INT REFERENCES "category" ("id") ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "section" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "title" VARCHAR(255) NOT NULL,
+    "ordering" INT NOT NULL,
+    "image_id" INT REFERENCES "image" ("id") ON DELETE SET NULL
+);
+CREATE TABLE IF NOT EXISTS "product" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "name" VARCHAR(255) NOT NULL,
+    "slug" VARCHAR(255) NOT NULL,
+    "description" VARCHAR(1000),
+    "additional_info" VARCHAR(1000),
+    "sku" VARCHAR(255),
+    "price" REAL NOT NULL,
+    "discount_price" REAL,
+    "stock" INT,
+    "available_to_purchase" INT NOT NULL  DEFAULT 0,
+    "created_at" TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    "category_id" INT NOT NULL REFERENCES "category" ("id") ON DELETE RESTRICT,
+    "main_image_id" INT REFERENCES "image" ("id") ON DELETE SET NULL,
+    "section_id" INT NOT NULL REFERENCES "section" ("id") ON DELETE RESTRICT
+);
+CREATE TABLE IF NOT EXISTS "productreview" (
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    "comment" VARCHAR(1000) NOT NULL,
+    "rating" INT NOT NULL,
+    "created_at" TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    "product_id" INT NOT NULL REFERENCES "product" ("id") ON DELETE CASCADE,
+    "user_id" INT NOT NULL REFERENCES "product" ("id") ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "product_image" (
+    "product_id" INT NOT NULL REFERENCES "product" ("id") ON DELETE CASCADE,
+    "image_id" INT NOT NULL REFERENCES "image" ("id") ON DELETE CASCADE
+);

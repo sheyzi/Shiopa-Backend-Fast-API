@@ -11,6 +11,7 @@ fastapi = "^0.68.1"
 tortoise-orm = "^0.17.6"
 aerich = "^0.5.7"
 asyncpg = "^0.24.0"
+cloudinary = "^1.26.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.7b0"
