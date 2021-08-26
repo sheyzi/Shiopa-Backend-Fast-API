@@ -6,6 +6,7 @@ from tortoise import fields
 class User(Model):
     first_name = fields.CharField(max_length=255)
     last_name = fields.CharField(max_length=255)
+    password = fields.CharField(max_length=255)
     avatar = fields.CharField(
         max_length=255,
         default="https://res.cloudinary.com/sheyzisilver/image/upload/v1629983532/Shiopa/default-avatar_cbbfaz.png",
